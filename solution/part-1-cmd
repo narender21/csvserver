@@ -1,0 +1,60 @@
+//To pull docker images
+docker pull infracloudio/csvserver:latest
+docker pull prom/prometheus:v2.22.0
+
+
+
+
+// To clone repo
+git clone https://github.com/infracloudio/csvserver.git
+
+
+//After the docker pull
+docker run -d -i infracloudio/csvserver:latest 
+//container failed  because below error after checking logs "docker logs <container_id>"
+Error: error while reading the file "/csvserver/inputdata": open /csvserver/inputdata: no such file or directory
+
+
+
+
+//Created gencsv.sh
+#!/bin/bash
+count=1
+while [ $count -lt 11 ]
+  do
+  rand=$((RANDOM%100))
+  echo "$count, $rand" >> inputFile
+  count=$(($count+1))
+done
+
+
+//inputFile after running gencsv.sh
+[root@ip-172-31-95-4 solution]# cat inputFile 
+1, 5
+2, 96
+3, 26
+4, 87
+5, 90
+6, 41
+7, 83
+8, 15
+9, 47
+10, 10
+
+
+//ran the conatainer using below command
+docker run -d -i -v /home/ec2-user/csvserver/solution/inputFile:/csvserver/inputdata infracloudio/csvserver:latest
+
+
+//verified the ports using below command
+netstat -tulnp
+
+
+//Stopped the conatiner
+docker stop <container_id>
+
+//Ran the container using env variable and port
+docker run -d -i -v /home/ec2-user/csvserver/solution/inputFile:/csvserver/inputdata -p 9393:9300 -e CSVSERVER_BORDER='Orange' infracloudio/csvserver:latest
+
+
+
