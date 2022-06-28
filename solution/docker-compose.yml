@@ -1,0 +1,7 @@
+mycsvserver:
+  image: 'infracloudio/csvserver'
+  container_name: csvserver_container
+  ports:
+    - 9393:9300
+  volumes:
+    - /home/ec2-user/csvserver/solution/inputFile:/csvserver/inputdata
